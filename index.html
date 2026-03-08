@@ -8,14 +8,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #e8e4df;
+  --bg: #d9d5cf;
   --text: #111;
   --text-mid: #555;
   --text-muted: #666;
   --text-faint: #888;
   --border: #333;
-  --board-bg: #e8e4df;
-  --grid: #d9d5d0;
+  --board-bg: #d9d5cf;
+  --grid: #ccc8c2;
   --btn-bg: #222;
   --btn-text: #fff;
   --btn-hover: #444;
@@ -402,8 +402,8 @@ function draw(){
     for(let r=0;r<piece.shape.length;r++) for(let c=0;c<piece.shape[r].length;c++)
       if(piece.shape[r][c]){
         const px=(piece.x+c)*B,py=(gy+r)*B;
-        ctx.beginPath();ctx.roundRect(px+3,py+3,B-6,B-6,3);
-        ctx.strokeStyle=COLORS[piece.type]+'40';ctx.lineWidth=1;ctx.stroke();
+        ctx.beginPath();ctx.roundRect(px+2,py+2,B-4,B-4,3);
+        ctx.strokeStyle=COLORS[piece.type]+'90';ctx.lineWidth=1.5;ctx.stroke();
       }
     // Piece
     for(let r=0;r<piece.shape.length;r++) for(let c=0;c<piece.shape[r].length;c++)
