@@ -7,15 +7,53 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #e8e4df;
+  --text: #111;
+  --text-mid: #555;
+  --text-muted: #666;
+  --text-faint: #888;
+  --border: #333;
+  --board-bg: #e8e4df;
+  --grid: #d9d5d0;
+  --btn-bg: #222;
+  --btn-text: #fff;
+  --btn-hover: #444;
+  --btn2-bg: none;
+  --btn2-border: #333;
+  --btn2-text: #222;
+  --btn2-hover: #ddd;
+  --overlay-text: #222;
+  --ghost-alpha: 40;
+}
+[data-theme="dark"] {
+  --bg: #1e1e1e;
+  --text: #e0e0e0;
+  --text-mid: #aaa;
+  --text-muted: #888;
+  --text-faint: #666;
+  --border: #ccc;
+  --board-bg: #181818;
+  --grid: #2a2a2a;
+  --btn-bg: #e0e0e0;
+  --btn-text: #181818;
+  --btn-hover: #bbb;
+  --btn2-bg: none;
+  --btn2-border: #ccc;
+  --btn2-text: #e0e0e0;
+  --btn2-hover: #333;
+  --overlay-text: #e0e0e0;
+  --ghost-alpha: 40;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  background: #e8e4df;
+  background: var(--bg);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
-  color: #111;
+  color: var(--text);
 }
 .game-container {
   display: flex;
@@ -27,7 +65,7 @@ body {
   flex-direction: column;
   width: 160px;
   height: 606px;
-  border: 3px solid #333;
+  border: 3px solid var(--border);
   border-right: none;
   border-radius: 8px 0 0 8px;
   padding: 20px;
@@ -37,7 +75,7 @@ body {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #666;
+  color: var(--text-muted);
   margin-bottom: 6px;
 }
 .stat-group {
@@ -53,7 +91,7 @@ body {
 .next-box {
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 3px solid #333;
+  border-bottom: 3px solid var(--border);
   margin-left: -20px;
   margin-right: -20px;
   padding-left: 20px;
@@ -70,7 +108,7 @@ body {
   height: 80px;
 }
 .btn {
-  background: #222;
+  background: var(--btn-bg);
   border: none;
   padding: 12px 0;
   border-radius: 8px;
@@ -80,31 +118,31 @@ body {
   font-weight: 500;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--btn-text);
   font-family: inherit;
   transition: background 0.2s;
 }
-.btn:hover { background: #444; }
+.btn:hover { background: var(--btn-hover); }
 .btn:focus, .btn-secondary:focus, #help-btn:focus { outline: none; }
 .btn-secondary {
-  background: none;
-  border: 2px solid #333;
-  color: #222;
+  background: var(--btn2-bg);
+  border: 2px solid var(--btn2-border);
+  color: var(--btn2-text);
 }
-.btn-secondary:hover { background: #ddd; }
+.btn-secondary:hover { background: var(--btn2-hover); }
 #help-btn {
   background: none;
   border: none;
   padding: 0;
   font-size: 12px;
-  color: #555;
+  color: var(--text-mid);
   cursor: pointer;
   font-family: inherit;
   letter-spacing: 1px;
   font-weight: 500;
   transition: color 0.2s;
 }
-#help-btn:hover { color: #222; }
+#help-btn:hover { color: var(--text); }
 .caret {
   display: inline-block;
   transition: transform 0.2s;
@@ -113,7 +151,7 @@ body {
 .caret.open { transform: rotate(180deg); }
 .keys {
   font-size: 10px;
-  color: #888;
+  color: var(--text-faint);
   line-height: 2.2;
   display: none;
   padding-top: 8px;
@@ -121,7 +159,7 @@ body {
 .keys.show { display: block; }
 .keys kbd {
   font-family: inherit;
-  color: #666;
+  color: var(--text-muted);
 }
 canvas#board {
   display: block;
@@ -131,7 +169,7 @@ canvas#board.blurred {
 }
 .board-wrap {
   position: relative;
-  border: 3px solid #333;
+  border: 3px solid var(--border);
   border-radius: 0 8px 8px 0;
   line-height: 0;
 }
@@ -149,12 +187,33 @@ canvas#board.blurred {
   font-weight: 500;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: #222;
+  color: var(--overlay-text);
 }
 #o-sub { display: none; }
+#theme-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: 2px solid var(--border);
+  color: var(--text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  line-height: 1;
+}
+#theme-btn:hover { background: var(--btn2-hover); }
+#theme-btn:focus { outline: none; }
 </style>
 </head>
 <body>
+<button id="theme-btn" onclick="toggleTheme()">&#9790;</button>
 <div class="game-container">
   <div class="side-panel">
     <div class="next-box">
@@ -206,7 +265,7 @@ function playTone(freq,dur,type='sine',vol=0.12,decay=true){
 
 function sndMove(){playTone(520,0.06,'sine',0.06);}
 function sndRotate(){playTone(680,0.07,'sine',0.08);}
-function sndLock(){playTone(200,0.15,'triangle',0.1);}
+function sndLock(){playTone(600,0.03,'sine',0.06);}
 function sndDrop(){playTone(90,0.15,'sine',0.15);playTone(800,0.03,'sine',0.05);}
 function sndClear(n){
   [392,440,523,659].slice(0,n).forEach((f,i)=>setTimeout(()=>playTone(f,0.3,'sine',0.09),i*80));
@@ -316,7 +375,11 @@ function draw(){
   ctx.clearRect(0,0,cvs.width,cvs.height);
 
   // Grid
-  ctx.strokeStyle='#f2f2f2'; ctx.lineWidth=0.5;
+  const cs=getComputedStyle(document.documentElement);
+  const gridColor=cs.getPropertyValue('--grid').trim();
+  const boardBg=cs.getPropertyValue('--board-bg').trim();
+  ctx.fillStyle=boardBg;ctx.fillRect(0,0,cvs.width,cvs.height);
+  ctx.strokeStyle=gridColor; ctx.lineWidth=0.5;
   for(let r=1;r<R;r++){ctx.beginPath();ctx.moveTo(0,r*B);ctx.lineTo(cvs.width,r*B);ctx.stroke();}
   for(let c=1;c<C;c++){ctx.beginPath();ctx.moveTo(c*B,0);ctx.lineTo(c*B,cvs.height);ctx.stroke();}
 
@@ -385,6 +448,7 @@ function rotP(){
 
 function showOv(t,s){document.getElementById('o-text').textContent=t;overlay.style.display='flex';cvs.classList.add('blurred');}
 function hideOv(){overlay.style.display='none';cvs.classList.remove('blurred');}
+
 
 function loop(time){
   if(over){if(!overSndPlayed){sndGameOver();overSndPlayed=true;}showOv('GAME OVER','');updatePlayBtn();draw();return;}
@@ -474,12 +538,23 @@ restartBtn.addEventListener('click',()=>{start();updatePlayBtn();});
 
 // Draw grid on load
 function drawGrid(){
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  ctx.strokeStyle='#f2f2f2';ctx.lineWidth=0.5;
+  const cs=getComputedStyle(document.documentElement);
+  const gridColor=cs.getPropertyValue('--grid').trim();
+  const boardBg=cs.getPropertyValue('--board-bg').trim();
+  ctx.fillStyle=boardBg;ctx.fillRect(0,0,cvs.width,cvs.height);
+  ctx.strokeStyle=gridColor;ctx.lineWidth=0.5;
   for(let r=1;r<R;r++){ctx.beginPath();ctx.moveTo(0,r*B);ctx.lineTo(cvs.width,r*B);ctx.stroke();}
   for(let c=1;c<C;c++){ctx.beginPath();ctx.moveTo(c*B,0);ctx.lineTo(c*B,cvs.height);ctx.stroke();}
 }
 drawGrid();
+
+function toggleTheme(){
+  const el=document.documentElement;
+  const dark=el.getAttribute('data-theme')==='dark';
+  el.setAttribute('data-theme',dark?'':'dark');
+  document.getElementById('theme-btn').innerHTML=dark?'&#9790;':'&#9728;';
+  drawGrid();
+}
 
 document.addEventListener('visibilitychange',()=>{
   if(document.hidden&&!over&&!paused){paused=true;updatePlayBtn();}
