@@ -302,7 +302,7 @@ const nCvs = document.getElementById('next-canvas');
 const nCtx = nCvs.getContext('2d');
 
 // Muted, restrained palette
-const COLORS = [
+const COLORS_DEFAULT = [
   null,
   '#5eb5b5', // I
   '#6a7ec2', // J
@@ -312,6 +312,7 @@ const COLORS = [
   '#9674b5', // T
   '#cd6b6b', // Z
 ];
+function getColors(){ return COLORS_DEFAULT; }
 
 const SHAPES = [
   [],
@@ -327,7 +328,12 @@ const SHAPES = [
 let board, piece, next, score, lines, level, over, paused, dTimer, last, dInt, overSndPlayed=false;
 
 const mkBoard = () => Array.from({length:R}, () => new Array(C).fill(0));
-const mkPiece = t => ({type:t, shape:SHAPES[t].map(r=>[...r]), x:Math.floor((C-SHAPES[t][0].length)/2), y:0});
+function mkPiece(t){
+  const shape=SHAPES[t].map(r=>[...r]);
+  let bot=shape.length-1;
+  while(bot>0&&shape[bot].every(c=>!c))bot--;
+  return {type:t, shape, x:Math.floor((C-shape[0].length)/2), y:-bot};
+}
 // 7-bag randomizer: each piece appears once per bag, shuffled
 let bag=[];
 function rndType(){
@@ -388,7 +394,7 @@ function drawBlock(cx,x,y,t,sz=B){
   const g=1, r=3;
   cx.beginPath();
   cx.roundRect(x*sz+g,y*sz+g,sz-g*2,sz-g*2,r);
-  cx.fillStyle=COLORS[t];
+  cx.fillStyle=getColors()[t];
   cx.fill();
 }
 
@@ -424,7 +430,7 @@ function draw(){
       if(piece.shape[r][c]){
         const px=(piece.x+c)*B,py=(gy+r)*B;
         ctx.beginPath();ctx.roundRect(px+2,py+2,B-4,B-4,3);
-        ctx.strokeStyle=COLORS[piece.type]+'90';ctx.lineWidth=1.5;ctx.stroke();
+        ctx.strokeStyle=getColors()[piece.type]+'90';ctx.lineWidth=1.5;ctx.stroke();
       }
     // Piece
     for(let r=0;r<piece.shape.length;r++) for(let c=0;c<piece.shape[r].length;c++)
@@ -439,7 +445,7 @@ function draw(){
     for(let r=0;r<s.length;r++) for(let c=0;c<s[r].length;c++)
       if(s[r][c]){
         nCtx.beginPath();nCtx.roundRect(ox+c*pb+1,oy+r*pb+1,pb-2,pb-2,2);
-        nCtx.fillStyle=COLORS[next.type];nCtx.fill();
+        nCtx.fillStyle=getColors()[next.type];nCtx.fill();
       }
   }
 }
@@ -522,6 +528,7 @@ function stopDAS(){
 
 document.addEventListener('keydown',e=>{
   if(e.repeat&&(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='ArrowDown')){e.preventDefault();return;}
+  if(e.key===' '){e.preventDefault();if(over||paused||clearing||!piece)return;}
   if(over&&e.key!=='Enter')return;
   if(e.key==='Enter'){start();return;}
   if(e.key==='p'||e.key==='P'||e.key==='Escape'){paused=!paused;updatePlayBtn();return;}
