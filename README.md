@@ -4,7 +4,7 @@ A clean, minimalist block-stacking game built as a single HTML file. No dependen
 
 **[Play it live](https://blockdrop.io)** | [GitHub Pages](https://davidsenack.github.io/blockdrop/)
 
-![screenshot](tetris_screenshot.png)
+![screenshot](screenshot.png)
 
 ## Play
 
