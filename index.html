@@ -202,31 +202,32 @@ canvas#board.blurred {
   text-decoration: none;
 }
 .brand:hover { color: var(--text); }
-#theme-btn {
+.top-controls {
   position: fixed;
   top: 16px;
   right: 16px;
-  background: none;
-  border: 2px solid var(--border);
-  color: var(--text);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 16px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
+  gap: 16px;
+}
+.top-controls button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.2s;
   line-height: 1;
 }
-#theme-btn:hover { background: var(--btn2-hover); }
-#theme-btn:focus { outline: none; }
+.top-controls button:hover { color: var(--text); }
+.top-controls button:focus { outline: none; }
 </style>
 </head>
 <body>
 <a class="brand" href="https://blockdrop.io">blockdrop.io</a>
-<button id="theme-btn" onclick="toggleTheme()">&#9790;</button>
+<div class="top-controls">
+  <button id="mute-btn" onclick="toggleMute()">&#9834;</button>
+  <button id="theme-btn" onclick="toggleTheme()">&#9790;</button>
+</div>
 <div class="game-container">
   <div class="side-panel">
     <div class="next-box">
@@ -264,9 +265,16 @@ canvas#board.blurred {
 <script>
 // Audio
 const actx=new(window.AudioContext||window.webkitAudioContext)();
+let muted=false;
 function resumeAudio(){if(actx.state==='suspended')actx.resume();}
+function toggleMute(){
+  muted=!muted;
+  document.getElementById('mute-btn').innerHTML=muted?'&#9835;':'&#9834;';
+  document.getElementById('mute-btn').style.textDecoration=muted?'line-through':'none';
+}
 
 function playTone(freq,dur,type='sine',vol=0.12,decay=true){
+  if(muted)return;
   resumeAudio();
   const o=actx.createOscillator(),g=actx.createGain();
   o.type=type;o.frequency.value=freq;
